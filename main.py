@@ -28,10 +28,14 @@ async def codigo(q:str):
         for doc in docs:            
             collections = db.collection("AliadosEngaged").document(doc.id).collections()
             for collection in collections:
-                for doc in collection.stream():
-                    usuarioCodigo =  doc.get('usuario', None).lower() if doc.get('usuario', None) is not None else ''
-                    print(usuarioCodigo)                    
-                    if q.lower() in usuarioCodigo:
+                for doc in collection.stream():                    
+                    try:
+                        usuario = doc.get('usuario').lower()
+                    except KeyError:
+                        usuario = ''
+                        continue
+                    print(usuario)                    
+                    if q.lower() in usuario:
                         print(f"{doc.id} => {doc.to_dict()}")
                         # Si encontramos la subcadena, podemos salir de los bucles y devolver True                        
                         return True
@@ -44,3 +48,6 @@ async def codigo(q:str):
     else:
         # Si no se encuentra la subcadena en ningún documento, devolvemos False
         return False
+
+       
+
