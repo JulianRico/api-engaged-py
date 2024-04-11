@@ -29,7 +29,7 @@ async def codigo(q:str):
             collections = db.collection("AliadosEngaged").document(doc.id).collections()
             for collection in collections:
                 for doc in collection.stream():
-                    usuarioCodigo =  doc.get('usuario').lower() if doc.get('usuario').lower() is not None else ''
+                    usuarioCodigo =  doc.get('usuario', None).lower() if doc.get('usuario', None) is not None else ''
                     print(usuarioCodigo)                    
                     if q.lower() in usuarioCodigo:
                         print(f"{doc.id} => {doc.to_dict()}")
